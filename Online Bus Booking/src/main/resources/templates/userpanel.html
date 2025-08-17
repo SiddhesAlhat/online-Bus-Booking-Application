@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Bus Booking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-5">
+    <h1 class="text-center mb-4">Online Bus Booking System</h1>
+    <div class="row">
+       
+        <div class="col-md-6">
+            <div class="card border-success mb-3">
+                <div class="card-header bg-success text-white">AdminPanel</div>
+                <div class="card-body">
+                    <a th:href="@{/admin/panel}" class="btn btn-outline-success w-100 mb-2">Manage Buses</a>
+                    <form th:action="@{/admin/route/add}" method="post" class="mb-2">
+                        <div class="input-group">
+                            <input type="text" name="source" class="form-control" placeholder="Source">
+                            <input type="text" name="destination" class="form-control" placeholder="Destination">
+                            <button class="btn btn-success" type="submit">Add Route</button>
+                        </div>
+                    </form>
+                    <form th:action="@{/admin/bus/add}" method="post">
+                        <input type="text" name="busNumber" class="form-control mb-2" placeholder="Bus Number">
+                        <input type="text" name="timing" class="form-control mb-2" placeholder="Timing">
+                        <select name="route.id" class="form-control mb-2">
+                            <option th:each="r : ${routes}" th:value="${r.id}" th:text="${r.source} + ' - ' + ${r.destination}"></option>
+                        </select>
+                        <button class="btn btn-success w-100" type="submit">Add Bus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Panel -->
+        <div class="col-md-6">
+            <div class="card border-primary mb-3">
+                <div class="card-header bg-primary text-white">User Panel</div>
+                <div class="card-body">
+                    <a th:href="@{/register}" class="btn btn-outline-primary w-100 mb-2">Register</a>
+                    <form th:action="@{/login}" method="post" class="mb-2">
+                        <input type="text" name="username" class="form-control mb-2" placeholder="Username">
+                        <input type="password" name="password" class="form-control mb-2" placeholder="Password">
+                        <button class="btn btn-primary w-100" type="submit">Login</button>
+                    </form>
+                    <form th:action="@{/book}" method="post">
+                        <input type="number" name="userId" class="form-control mb-2" placeholder="User ID">
+                        <select name="busId" class="form-control mb-2">
+                            <option th:each="b : ${allBuses}" th:value="${b.id}" th:text="${b.busNumber} + ' | ' + ${b.route.source} + ' - ' + ${b.route.destination} + ' at ' + ${b.timing}"></option>
+                        </select>
+                        <input type="date" name="date" class="form-control mb-2">
+                        <button class="btn btn-warning w-100" type="submit">Book Ticket (Simulate Payment)</button>
+                    </form>
+                    <a th:href="@{/user/bookings}" class="btn btn-outline-dark w-100 mt-2">View My Bookings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
