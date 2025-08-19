@@ -1,61 +1,38 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
+import java.util.List;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Bus {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
-  private String busNumber;
-  private String timing;
-  @ManyToOne
-  @JoinColumn(name = "route_id")
-  private Route route;
-  private int seats = 40;
-public int getId() {
-	return id;
-}
-public void setId(int id) {
-	this.id = id;
-}
-public String getBusNumber() {
-	return busNumber;
-}
-public void setBusNumber(String busNumber) {
-	this.busNumber = busNumber;
-}
-public String getTiming() {
-	return timing;
-}
-public void setTiming(String timing) {
-	this.timing = timing;
-}
-public Route getRoute() {
-	return route;
-}
-public void setRoute(Route route) {
-	this.route = route;
-}
-public int getSeats() {
-	return seats;
-}
-public void setSeats(int seats) {
-	this.seats = seats;
-}
-public Bus() {
-	super();
-	this.id = id;
-	this.busNumber = busNumber;
-	this.timing = timing;
-	this.route = route;
-	this.seats = seats;
-}
-  
-}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    private String busNumber;
+    private String type; // AC / NON-AC
+    private int capacity;
+
+    @ManyToOne
+    private Route route;
+
+    @OneToMany(mappedBy = "bus")
+    private List<Booking> bookings;
+
+    public Bus() {}
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getBusNumber() { return busNumber; }
+    public void setBusNumber(String busNumber) { this.busNumber = busNumber; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public Route getRoute() { return route; }
+    public void setRoute(Route route) { this.route = route; }
+    public List<Booking> getBookings() { return bookings; }
+    public void setBookings(List<Booking> bookings) { this.bookings = bookings; }
+    
+}

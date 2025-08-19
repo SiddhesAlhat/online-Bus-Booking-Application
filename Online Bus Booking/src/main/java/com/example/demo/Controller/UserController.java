@@ -1,28 +1,32 @@
 package com.example.demo.Controller;
 
-import java.util.Date;
+
+import com.example.demo.entity.Booking;
+import com.example.demo.entity.Bus;
+import com.example.demo.entity.User;
+import com.example.demo.repository.BusRepository;
+import com.example.demo.repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
+
+import com.example.demo.Service.BookingService;
+import com.example.demo.Service.UserService;
+
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.Repository.BusRepository;
-import com.example.demo.Repository.UserRepository;
-import com.example.demo.Service.BookingService;
-import com.example.demo.entity.Booking;
-import com.example.demo.entity.Bus;
-import com.example.demo.entity.User;
+
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
-
+    private final UserService userService;
+    
     @Autowired
     private UserRepository userRepo;
 
@@ -31,33 +35,27 @@ public class UserController {
 
     @Autowired
     private BookingService bookingService;
+    
+    public UserController(UserService userService) { this.userService = userService; }
 
-    // Redirect root to login
-    @GetMapping("/index")
-    public String home() {
-        return "login";
-    }
-
-    // Register page
     @GetMapping("/register")
-    public String regForm(Model m) {
-        m.addAttribute("user", new User());
+    public String showRegForm(Model model) {
+        model.addAttribute("user", new User());
         return "register";
     }
 
-    // Save user registration
     @PostMapping("/register")
-    public String register(@ModelAttribute User u) {
-        userRepo.save(u);
-        return "login";
+    public String register(@ModelAttribute User user) {
+        user.setRole("USER");
+        userService.save(user);
+        return "redirect:/user/login";
     }
 
-    // Login form page
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginPage() {
         return "login";
     }
-
+    
     // Login logic and session setup
     @PostMapping("/login")
     public String login(@RequestParam String username,
@@ -66,6 +64,7 @@ public class UserController {
                         Model m) {
 
         User u = userRepo.findByUsername(username);
+//    	User u = userRepo.findByEmail(username);
 
         if (u != null && u.getPassword().equals(password)) {
             session.setAttribute("loggedUser", u);
@@ -94,24 +93,29 @@ public class UserController {
     }
 
     // Handle booking form submission
-    @PostMapping("/book_ticket")
-    public String bookTicket(@RequestParam int busId,
-                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date travelDate,
-                             HttpSession session,
-                             Model model) {
-
-        User user = (User) session.getAttribute("loggedUser");
-        Bus bus = busRepo.findById(busId).orElse(null);
-
-        if (user != null && bus != null) {
-            Booking booking = bookingService.bookTicket(user, bus, travelDate);
-            model.addAttribute("booking", booking);
-            return "confirmation";
-        } else {
-            model.addAttribute("error", "Booking failed. Invalid user or bus.");
-            model.addAttribute("allBuses", busRepo.findAll());
-            return "user_dashboard";
-        }
-    }
-
+//    @PostMapping("/book_ticket")
+//    public String bookTicket(@RequestParam int busId,
+//                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date travelDate,
+//                             HttpSession session,
+//                             Model model) {
+//
+//        User user = (User) session.getAttribute("loggedUser");
+//        Bus bus = busRepo.findById(busId).orElse(null);
+//       
+//        
+//
+//        if (user != null && bus != null) {
+//            Booking booking = bookingService.bookTicket(user, bus, travelDate);
+//            model.addAttribute("booking", booking);
+//            return "confirmation";
+//        } else {
+//            model.addAttribute("error", "Booking failed. Invalid user or bus.");
+//            model.addAttribute("allBuses", busRepo.findAll());
+//            return "user_dashboard";
+//        }
+//    }
+    
+    
+    
+    
 }
