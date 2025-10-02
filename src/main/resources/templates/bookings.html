@@ -4,318 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings - BusBook</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-            padding-bottom: 80px;
-        }
-
-        .navbar {
-            background: white;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        .page-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .page-header h1 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-header p {
-            color: #666;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            background: white;
-            padding: 0.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .tab {
-            flex: 1;
-            padding: 0.8rem;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #666;
-        }
-
-        .tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .booking-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .booking-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-
-        .booking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .booking-id {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .status-badge {
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .status-confirmed {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-cancelled {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .booking-details {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .detail-item h4 {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .detail-item p {
-            color: #333;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .booking-actions {
-            display: flex;
-            gap: 0.8rem;
-        }
-
-        .btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-            min-height: 44px;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .no-bookings {
-            text-align: center;
-            padding: 3rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .no-bookings-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            padding: 0.5rem 0;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0.5rem;
-            color: #666;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .nav-item.active {
-            color: #667eea;
-        }
-
-        .nav-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .nav-label {
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            .booking-details {
-                grid-template-columns: 1fr 1fr;
-            }
-            .nav-links {
-                display: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <nav class="navbar">
-        <a href="/" class="logo">
-            <span>🚌</span>
-            <span>BusBook</span>
-        </a>
+        <a href="/" class="logo">🚌 BusBook</a>
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="/search">Search</a>
-            <a href="/bookings">Bookings</a>
+            <a href="/bookings">My Bookings</a>
             <a href="#" onclick="logout()">Logout</a>
         </div>
     </nav>
 
     <div class="container">
-        <div class="page-header">
+        <div class="card">
             <h1>My Bookings</h1>
-            <p>View and manage your bus tickets and passes</p>
-        </div>
+            <p>View and manage your bus tickets</p>
 
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('bookings')">🎫 Tickets</button>
-            <button class="tab" onclick="showTab('passes')">🎟️ Passes</button>
-        </div>
+            <div id="alertBox" class="alert"></div>
 
-        <div id="bookingsContainer">
-            <div class="no-bookings">
-                <div class="no-bookings-icon">📋</div>
-                <h3>Loading your bookings...</h3>
+            <div id="bookingsContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading bookings...</p>
+                </div>
             </div>
         </div>
-
-        <div id="passesContainer" style="display: none;">
-            <div class="no-bookings">
-                <div class="no-bookings-icon">🎟️</div>
-                <h3>No active passes</h3>
-                <p>Purchase a pass for unlimited travel</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <a href="/" class="nav-item">
-            <div class="nav-icon">🏠</div>
-            <div class="nav-label">Home</div>
-        </a>
-        <a href="/search" class="nav-item">
-            <div class="nav-icon">🔍</div>
-            <div class="nav-label">Search</div>
-        </a>
-        <a href="/bookings" class="nav-item active">
-            <div class="nav-icon">🎫</div>
-            <div class="nav-label">Bookings</div>
-        </a>
-        <a href="/login" class="nav-item">
-            <div class="nav-icon">👤</div>
-            <div class="nav-label">Profile</div>
-        </a>
     </div>
 
     <script>
@@ -330,26 +45,14 @@
             loadBookings();
         });
 
-        function showTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (tab === 'bookings') {
-                document.getElementById('bookingsContainer').style.display = 'block';
-                document.getElementById('passesContainer').style.display = 'none';
-            } else {
-                document.getElementById('bookingsContainer').style.display = 'none';
-                document.getElementById('passesContainer').style.display = 'block';
-            }
-        }
-
+        // READ bookings from database
         async function loadBookings() {
             const userPhone = localStorage.getItem('userPhone');
             const container = document.getElementById('bookingsContainer');
 
             try {
                 const response = await fetch(`${API_BASE}/bookings`, {
-                    headers: { 'X-User-Phone': userPhone }
+                    headers: {'X-User-Phone': userPhone}
                 });
 
                 const data = await response.json();
@@ -358,23 +61,21 @@
                     displayBookings(data.data);
                 } else {
                     container.innerHTML = `
-                        <div class="no-bookings">
-                            <div class="no-bookings-icon">📋</div>
-                            <h3>No bookings found</h3>
+                        <div style="text-align: center; padding: 3rem;">
+                            <h3>📋 No bookings found</h3>
                             <p>Start booking your bus tickets now!</p>
-                            <a href="/search" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">Search Buses</a>
+                            <a href="/search" class="btn btn-primary" style="margin-top: 1rem;">Search Buses</a>
                         </div>
                     `;
                 }
             } catch (error) {
-                console.error('Error loading bookings:', error);
                 container.innerHTML = `
-                    <div class="no-bookings">
-                        <div class="no-bookings-icon">⚠️</div>
-                        <h3>Error loading bookings</h3>
-                        <p>Please try again later</p>
+                    <div style="text-align: center; padding: 3rem;">
+                        <h3>⚠️ Error loading bookings</h3>
+                        <p>Please try again</p>
                     </div>
                 `;
+                console.error('Error loading bookings:', error);
             }
         }
 
@@ -388,39 +89,42 @@
                 bookingCard.className = 'booking-card';
                 bookingCard.innerHTML = `
                     <div class="booking-header">
-                        <div class="booking-id">Ticket #${booking.ticketNumber || booking.id}</div>
+                        <div>
+                            <h3>Ticket #${booking.ticketNumber || booking.id}</h3>
+                            <p style="color: #666;">Booking ID: ${booking.id}</p>
+                        </div>
                         <span class="status-badge ${statusClass}">${booking.status}</span>
                     </div>
-                    <div class="booking-details">
-                        <div class="detail-item">
-                            <h4>Bus Number</h4>
-                            <p>${booking.busNumber}</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <h4 style="color: #666; font-size: 0.85rem;">Bus Number</h4>
+                            <p style="font-weight: 600;">${booking.busNumber || 'N/A'}</p>
                         </div>
-                        <div class="detail-item">
-                            <h4>Route</h4>
-                            <p>${booking.source} → ${booking.destination}</p>
+                        <div>
+                            <h4 style="color: #666; font-size: 0.85rem;">Route</h4>
+                            <p style="font-weight: 600;">${booking.source || 'N/A'} → ${booking.destination || 'N/A'}</p>
                         </div>
-                        <div class="detail-item">
-                            <h4>Travel Date</h4>
-                            <p>${new Date(booking.travelDate).toLocaleDateString()}</p>
+                        <div>
+                            <h4 style="color: #666; font-size: 0.85rem;">Travel Date</h4>
+                            <p style="font-weight: 600;">${new Date(booking.travelDate).toLocaleDateString()}</p>
                         </div>
-                        <div class="detail-item">
-                            <h4>Seat</h4>
-                            <p>${booking.seatNumber || 'N/A'}</p>
+                        <div>
+                            <h4 style="color: #666; font-size: 0.85rem;">Seat Number</h4>
+                            <p style="font-weight: 600;">${booking.seatNumber || 'N/A'}</p>
                         </div>
-                        <div class="detail-item">
-                            <h4>Fare</h4>
-                            <p>₹${booking.fare}</p>
+                        <div>
+                            <h4 style="color: #666; font-size: 0.85rem;">Fare</h4>
+                            <p style="font-weight: 600; color: #667eea;">₹${booking.fare}</p>
                         </div>
-                        <div class="detail-item">
-                            <h4>Booking Time</h4>
-                            <p>${new Date(booking.bookingTime).toLocaleDateString()}</p>
+                        <div>
+                            <h4 style="color: #666; font-size: 0.85rem;">Booking Time</h4>
+                            <p style="font-weight: 600;">${new Date(booking.bookingTime).toLocaleDateString()}</p>
                         </div>
                     </div>
-                    <div class="booking-actions">
+                    <div style="display: flex; gap: 1rem;">
                         ${booking.status === 'CONFIRMED' ? `
-                            <button class="btn btn-primary" onclick="viewTicket(${booking.id})">View Ticket</button>
-                            <button class="btn btn-danger" onclick="cancelBooking(${booking.id})">Cancel</button>
+                            <button class="btn btn-primary" onclick="viewTicketPage(${booking.id})">🎫 View Ticket</button>
+                            <button class="btn btn-danger" onclick="cancelBooking(${booking.id})">Cancel Booking</button>
                         ` : ''}
                     </div>
                 `;
@@ -428,10 +132,34 @@
             });
         }
 
-        function viewTicket(bookingId) {
-            alert(`Viewing ticket for booking ID: ${bookingId}\nThis will show the digital ticket with QR code`);
+        // Redirect to ticket page
+        function viewTicketPage(bookingId) {
+            window.location.href = `/ticket?bookingId=${bookingId}`;
         }
 
+        // View ticket with QR code (old function - kept for backward compatibility)
+        async function viewTicket(bookingId) {
+            const userPhone = localStorage.getItem('userPhone');
+
+            try {
+                const response = await fetch(`${API_BASE}/bookings/${bookingId}/ticket`, {
+                    headers: {'X-User-Phone': userPhone}
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`Ticket Details:\n\nTicket Number: ${data.data.ticketNumber}\nPassenger: ${data.data.passengerName}\nBus: ${data.data.busNumber}\nSeat: ${data.data.seatNumber}\n\nQR Code: ${data.data.qrCode}`);
+                } else {
+                    showAlert('Error loading ticket', 'error');
+                }
+            } catch (error) {
+                showAlert('Error loading ticket', 'error');
+                console.error('Ticket error:', error);
+            }
+        }
+
+        // DELETE booking from database
         async function cancelBooking(bookingId) {
             if (!confirm('Are you sure you want to cancel this booking?')) {
                 return;
@@ -439,24 +167,64 @@
 
             const userPhone = localStorage.getItem('userPhone');
 
+            // Find the booking data before cancelling
+            const bookings = await getUserBookingsData();
+            const booking = bookings.find(b => b.id === bookingId);
+
             try {
                 const response = await fetch(`${API_BASE}/bookings/${bookingId}`, {
                     method: 'DELETE',
-                    headers: { 'X-User-Phone': userPhone }
+                    headers: {'X-User-Phone': userPhone}
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
-                    alert('Booking cancelled successfully!');
-                    loadBookings();
+                    // Store cancellation data in sessionStorage
+                    if (booking) {
+                        sessionStorage.setItem('cancellationData', JSON.stringify({
+                            bookingId: booking.id,
+                            busNumber: booking.busNumber,
+                            source: booking.source,
+                            destination: booking.destination,
+                            seatNumber: booking.seatNumber,
+                            travelDate: booking.travelDate,
+                            fare: booking.fare
+                        }));
+                    }
+                    
+                    // Redirect to cancellation page
+                    window.location.href = '/cancellation';
                 } else {
-                    alert('Failed to cancel booking: ' + data.message);
+                    showAlert('❌ Failed to cancel: ' + data.message, 'error');
                 }
             } catch (error) {
-                alert('Error cancelling booking');
+                showAlert('❌ Error cancelling booking', 'error');
                 console.error('Cancel error:', error);
             }
+        }
+
+        // Helper function to get booking data
+        async function getUserBookingsData() {
+            const userPhone = localStorage.getItem('userPhone');
+            try {
+                const response = await fetch(`${API_BASE}/bookings`, {
+                    headers: {'X-User-Phone': userPhone}
+                });
+                const data = await response.json();
+                return data.success ? data.data : [];
+            } catch (error) {
+                console.error('Error fetching bookings:', error);
+                return [];
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertBox');
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
         }
 
         function logout() {

@@ -15,8 +15,12 @@ import com.example.busbooking.repository.UserRepository;
 public class MainController {
 
 	@Autowired
-	private UserRepository uesrRepository;
+	private UserRepository userRepository;
+	
+	@Autowired
 	private BusRepository busRepository;
+	
+	@Autowired
 	private BookingRepository bookingRepository;
 	
 	@GetMapping("/")
@@ -41,10 +45,30 @@ public class MainController {
 		return "booking";
 	}
 	
-	
+	@GetMapping("/bookings")
+	public String bookings() {
+		return "bookings";
+	}
 
 	@GetMapping("/search")
-	public String search() {return "search";}
+	public String search() {
+		return "search";
+	}
+	
+	@GetMapping("/seat-selection")
+	public String seatSelection() {
+		return "seat-selection";
+	}
+	
+	@GetMapping("/ticket")
+	public String ticket() {
+		return "ticket";
+	}
+	
+	@GetMapping("/cancellation")
+	public String cancellation() {
+		return "cancellation";
+	}
 	
 	@PostMapping()
 	public String register(User user) {

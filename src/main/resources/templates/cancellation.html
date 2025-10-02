@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Cancelled - BusBook</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .cancellation-container {
+            max-width: 700px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .cancellation-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .cancellation-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .cancellation-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .cancellation-header p {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .cancellation-body {
+            padding: 2rem;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .refund-info {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .refund-info h3 {
+            color: #856404;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .refund-info p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .refund-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #28a745;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .timeline {
+            margin: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .timeline-content h4 {
+            margin: 0 0 0.3rem 0;
+            color: #333;
+        }
+
+        .timeline-content p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .support-box {
+            background: #e7f3ff;
+            border: 2px solid #2196F3;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .support-box h3 {
+            color: #1976D2;
+            margin-bottom: 0.5rem;
+        }
+
+        .support-box p {
+            color: #1976D2;
+            margin: 0.5rem 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .navbar, .action-buttons {
+                display: none;
+            }
+            .cancellation-container {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">🚌 BusBook</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/search">Search</a>
+            <a href="/bookings">My Bookings</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="cancellation-container">
+            <!-- Header -->
+            <div class="cancellation-header">
+                <div class="cancellation-icon">❌</div>
+                <h1>Booking Cancelled</h1>
+                <p>Your booking has been successfully cancelled</p>
+            </div>
+
+            <!-- Body -->
+            <div class="cancellation-body">
+                <!-- Cancellation Details -->
+                <div class="info-box">
+                    <h3 style="margin-top: 0; color: #333;">Cancellation Details</h3>
+                    <div class="info-row">
+                        <span class="info-label">Booking ID</span>
+                        <span class="info-value" id="bookingId">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Bus Number</span>
+                        <span class="info-value" id="busNumber">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Route</span>
+                        <span class="info-value" id="route">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Seat Number</span>
+                        <span class="info-value" id="seatNumber">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Travel Date</span>
+                        <span class="info-value" id="travelDate">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Cancellation Date</span>
+                        <span class="info-value" id="cancellationDate">-</span>
+                    </div>
+                </div>
+
+                <!-- Refund Information -->
+                <div class="refund-info">
+                    <h3>💰 Refund Information</h3>
+                    <p>Your refund amount:</p>
+                    <div class="refund-amount" id="refundAmount">₹0</div>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">
+                        The refund will be processed within 5-7 business days and credited to your original payment method.
+                    </p>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    <h3 style="color: #333; margin-bottom: 1rem;">What Happens Next?</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">✓</div>
+                        <div class="timeline-content">
+                            <h4>Booking Cancelled</h4>
+                            <p>Your booking has been cancelled and seat released</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">⏳</div>
+                        <div class="timeline-content">
+                            <h4>Refund Processing</h4>
+                            <p>Refund will be initiated within 24 hours</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">💳</div>
+                        <div class="timeline-content">
+                            <h4>Amount Credited</h4>
+                            <p>Refund will appear in your account within 5-7 business days</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Box -->
+                <div class="support-box">
+                    <h3>Need Help?</h3>
+                    <p>📧 Email: support@busbook.com</p>
+                    <p>📞 Phone: 1800-123-4567</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">
+                        Our support team is available 24/7 to assist you
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="goToHome()" style="flex: 1;">
+                        🏠 Go to Home
+                    </button>
+                    <button class="btn btn-primary" onclick="searchNewBus()" style="flex: 1;">
+                        🔍 Search New Bus
+                    </button>
+                    <button class="btn btn-success" onclick="printReceipt()" style="flex: 1;">
+                        🖨️ Print Receipt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let cancellationData = null;
+
+        window.addEventListener('load', () => {
+            // Get cancellation data from sessionStorage
+            const data = sessionStorage.getItem('cancellationData');
+            
+            if (data) {
+                cancellationData = JSON.parse(data);
+                displayCancellation(cancellationData);
+                // Clear the data after displaying
+                sessionStorage.removeItem('cancellationData');
+            } else {
+                // If no data, redirect to bookings
+                alert('No cancellation data found');
+                window.location.href = '/bookings';
+            }
+        });
+
+        function displayCancellation(data) {
+            document.getElementById('bookingId').textContent = data.bookingId;
+            document.getElementById('busNumber').textContent = data.busNumber || 'N/A';
+            document.getElementById('route').textContent = `${data.source || 'N/A'} → ${data.destination || 'N/A'}`;
+            document.getElementById('seatNumber').textContent = data.seatNumber || 'N/A';
+            
+            if (data.travelDate) {
+                document.getElementById('travelDate').textContent = new Date(data.travelDate).toLocaleDateString('en-IN', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+            
+            document.getElementById('cancellationDate').textContent = new Date().toLocaleDateString('en-IN', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Calculate refund (assuming full refund for now)
+            const refundAmount = data.fare || 0;
+            document.getElementById('refundAmount').textContent = `₹${refundAmount}`;
+        }
+
+        function goToHome() {
+            window.location.href = '/';
+        }
+
+        function searchNewBus() {
+            window.location.href = '/search';
+        }
+
+        function printReceipt() {
+            window.print();
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+    </script>
+</body>
+</html>

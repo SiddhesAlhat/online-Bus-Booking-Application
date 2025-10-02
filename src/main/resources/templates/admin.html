@@ -4,163 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - BusBook</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-        }
-
-        .navbar {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .dashboard-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .dashboard-header h1 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 0.3rem;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .admin-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .admin-section h3 {
-            margin-bottom: 1.5rem;
-            color: #333;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-right: 0.5rem;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">
-            <span>🚌</span>
-            <span>BusBook Admin</span>
-        </div>
+        <a href="/" class="logo">🚌 BusBook Admin</a>
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="/admin">Dashboard</a>
@@ -169,103 +17,231 @@
     </nav>
 
     <div class="container">
-        <div class="dashboard-header">
+        <div class="card">
             <h1>Admin Dashboard</h1>
-            <p style="color: #666; margin-top: 0.5rem;">Manage your bus booking system</p>
-        </div>
+            <p>Manage buses, routes, and bookings</p>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">🚌</div>
-                <div class="stat-value">13</div>
-                <div class="stat-label">Total Buses</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🎫</div>
-                <div class="stat-value">0</div>
-                <div class="stat-label">Today's Bookings</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">👥</div>
-                <div class="stat-value">0</div>
-                <div class="stat-label">Total Users</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">💰</div>
-                <div class="stat-value">₹0</div>
-                <div class="stat-label">Today's Revenue</div>
-            </div>
-        </div>
+            <div id="alertBox" class="alert"></div>
 
-        <div class="admin-section">
-            <h3>Recent Bookings</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>User</th>
-                        <th>Bus</th>
-                        <th>Route</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 2rem;">
-                            No bookings yet
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Stats -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 2rem 0;">
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                    <p style="font-size: 2rem; font-weight: 700; color: #667eea;" id="totalBuses">0</p>
+                    <p style="color: #666;">Total Buses</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                    <p style="font-size: 2rem; font-weight: 700; color: #28a745;" id="totalBookings">0</p>
+                    <p style="color: #666;">Total Bookings</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                    <p style="font-size: 2rem; font-weight: 700; color: #ffc107;" id="totalUsers">0</p>
+                    <p style="color: #666;">Total Users</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                    <p style="font-size: 2rem; font-weight: 700; color: #dc3545;" id="totalRevenue">₹0</p>
+                    <p style="color: #666;">Revenue</p>
+                </div>
+            </div>
 
-        <div class="admin-section">
-            <h3>Bus Management</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Bus Number</th>
-                        <th>Route</th>
-                        <th>Type</th>
-                        <th>Departure</th>
-                        <th>Fare</th>
-                        <th>Seats</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>MH-01-1234</td>
-                        <td>Mumbai → Pune</td>
-                        <td>AC</td>
-                        <td>08:00 AM</td>
-                        <td>₹500</td>
-                        <td>40/40</td>
-                        <td>
-                            <button class="btn btn-primary">Edit</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DL-02-9876</td>
-                        <td>Delhi → Jaipur</td>
-                        <td>Sleeper</td>
-                        <td>10:00 PM</td>
-                        <td>₹800</td>
-                        <td>40/40</td>
-                        <td>
-                            <button class="btn btn-primary">Edit</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- All Bookings -->
+            <div style="margin-top: 2rem;">
+                <h2>All Bookings</h2>
+                <div id="bookingsContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading bookings...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Routes -->
+            <div style="margin-top: 2rem;">
+                <h2>All Routes</h2>
+                <div id="routesContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading routes...</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        window.addEventListener('load', () => {
+            loadStats();
+            loadAllBookings();
+            loadAllRoutes();
+        });
+
+        // Load stats
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/stats`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('totalUsers').textContent = data.data.totalUsers;
+                    document.getElementById('totalBookings').textContent = data.data.totalBookings;
+                    document.getElementById('totalRevenue').textContent = '₹' + data.data.totalRevenue.toFixed(2);
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // READ all bookings from database
+        async function loadAllBookings() {
+            const container = document.getElementById('bookingsContainer');
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/bookings`);
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    displayBookings(data.data);
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <h3>No bookings found</h3>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <h3>⚠️ Error loading bookings</h3>
+                    </div>
+                `;
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        function displayBookings(bookings) {
+            const container = document.getElementById('bookingsContainer');
+            container.innerHTML = '';
+
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ticket #</th>
+                        <th>Bus Number</th>
+                        <th>Route</th>
+                        <th>Seat</th>
+                        <th>Travel Date</th>
+                        <th>Fare</th>
+                        <th>Status</th>
+                        <th>Booking Time</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingsTableBody"></tbody>
+            `;
+
+            const tbody = table.querySelector('tbody');
+            bookings.forEach(booking => {
+                const row = document.createElement('tr');
+                const statusClass = booking.status.toLowerCase();
+                row.innerHTML = `
+                    <td>${booking.id}</td>
+                    <td>${booking.ticketNumber || 'N/A'}</td>
+                    <td>${booking.busNumber}</td>
+                    <td>${booking.source} → ${booking.destination}</td>
+                    <td>${booking.seatNumber || 'N/A'}</td>
+                    <td>${new Date(booking.travelDate).toLocaleDateString()}</td>
+                    <td style="font-weight: 700; color: #667eea;">₹${booking.fare}</td>
+                    <td><span class="status-badge status-${statusClass}">${booking.status}</span></td>
+                    <td>${new Date(booking.bookingTime).toLocaleString()}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            container.appendChild(table);
+        }
+
+        // READ all routes from database
+        async function loadAllRoutes() {
+            const container = document.getElementById('routesContainer');
+
+            try {
+                const response = await fetch(`${API_BASE}/routes`);
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    displayRoutes(data.data);
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <h3>No routes found</h3>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <h3>⚠️ Error loading routes</h3>
+                    </div>
+                `;
+                console.error('Error loading routes:', error);
+            }
+        }
+
+        function displayRoutes(routes) {
+            const container = document.getElementById('routesContainer');
+            container.innerHTML = '';
+
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Bus Number</th>
+                        <th>Route</th>
+                        <th>Type</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Fare</th>
+                        <th>Total Seats</th>
+                        <th>Available</th>
+                    </tr>
+                </thead>
+                <tbody id="routesTableBody"></tbody>
+            `;
+
+            const tbody = table.querySelector('tbody');
+            routes.forEach(route => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${route.id}</td>
+                    <td>${route.busNumber}</td>
+                    <td>${route.source} → ${route.destination}</td>
+                    <td><span class="bus-type">${route.busType}</span></td>
+                    <td>${route.departureTime}</td>
+                    <td>${route.arrivalTime}</td>
+                    <td style="font-weight: 700; color: #667eea;">₹${route.fare}</td>
+                    <td>${route.totalSeats}</td>
+                    <td style="color: #28a745; font-weight: 600;">${route.availableSeats}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            container.appendChild(table);
+
+            // Update bus count
+            document.getElementById('totalBuses').textContent = routes.length;
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertBox');
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+        }
+
         function logout() {
             localStorage.clear();
             window.location.href = '/login';

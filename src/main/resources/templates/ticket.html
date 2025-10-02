@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket - BusBook</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .ticket-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .ticket-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .ticket-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .ticket-number {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .ticket-body {
+            padding: 2rem;
+        }
+
+        .ticket-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px dashed #e0e0e0;
+        }
+
+        .ticket-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .route-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .route-point {
+            text-align: center;
+            flex: 1;
+        }
+
+        .route-point h3 {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 0.3rem;
+        }
+
+        .route-point p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .route-arrow {
+            font-size: 2rem;
+            color: #667eea;
+            margin: 0 1rem;
+        }
+
+        .qr-code-section {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .qr-code-image {
+            max-width: 250px;
+            height: auto;
+            margin: 1rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .status-badge-large {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .print-section {
+            text-align: center;
+            padding: 1rem;
+            background: #fff3cd;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .navbar, .action-buttons, .print-section {
+                display: none;
+            }
+            .ticket-container {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .route-display {
+                flex-direction: column;
+            }
+            .route-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">🚌 BusBook</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/search">Search</a>
+            <a href="/bookings">My Bookings</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="ticket-container">
+            <!-- Ticket Header -->
+            <div class="ticket-header">
+                <h1>🎫 Bus Ticket</h1>
+                <p class="ticket-number" id="ticketNumber">Loading...</p>
+                <span class="status-badge-large status-confirmed" id="statusBadge">CONFIRMED</span>
+            </div>
+
+            <!-- Ticket Body -->
+            <div class="ticket-body">
+                <!-- Route Information -->
+                <div class="ticket-section">
+                    <div class="section-title">Journey Details</div>
+                    <div class="route-display">
+                        <div class="route-point">
+                            <h3 id="sourceCity">-</h3>
+                            <p>From</p>
+                        </div>
+                        <div class="route-arrow">→</div>
+                        <div class="route-point">
+                            <h3 id="destinationCity">-</h3>
+                            <p>To</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passenger & Bus Details -->
+                <div class="ticket-section">
+                    <div class="section-title">Passenger & Bus Information</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Passenger Name</span>
+                            <span class="info-value" id="passengerName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Bus Number</span>
+                            <span class="info-value" id="busNumber">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Seat Number</span>
+                            <span class="info-value" id="seatNumber">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Travel Date</span>
+                            <span class="info-value" id="travelDate">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Departure Time</span>
+                            <span class="info-value" id="departureTime">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Fare</span>
+                            <span class="info-value" id="fare" style="color: #667eea;">₹0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code -->
+                <div class="ticket-section">
+                    <div class="section-title">Ticket QR Code</div>
+                    <div class="qr-code-section">
+                        <p style="color: #666; margin-bottom: 1rem;">Scan this QR code for verification</p>
+                        <div id="qrCodeContainer">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <p>Loading QR Code...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Details -->
+                <div class="ticket-section">
+                    <div class="section-title">Booking Information</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Booking ID</span>
+                            <span class="info-value" id="bookingId">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Booking Date</span>
+                            <span class="info-value" id="bookingDate">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Notice -->
+                <div class="print-section">
+                    <p style="color: #856404; font-weight: 600;">
+                        📱 Please carry this ticket (printed or digital) while boarding
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="goBack()" style="flex: 1;">
+                        ← Back to Bookings
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadTicket()" style="flex: 1;">
+                        📥 Download
+                    </button>
+                    <button class="btn btn-success" onclick="printTicket()" style="flex: 1;">
+                        🖨️ Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let ticketData = null;
+
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingId = urlParams.get('bookingId');
+
+            if (!bookingId) {
+                alert('Invalid ticket');
+                window.location.href = '/bookings';
+                return;
+            }
+
+            loadTicket(bookingId);
+        });
+
+        async function loadTicket(bookingId) {
+            const userPhone = localStorage.getItem('userPhone');
+            if (!userPhone) {
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/bookings/${bookingId}/ticket`, {
+                    headers: {'X-User-Phone': userPhone}
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    ticketData = data.data;
+                    displayTicket(ticketData);
+                } else {
+                    alert('Error loading ticket: ' + data.message);
+                    window.location.href = '/bookings';
+                }
+            } catch (error) {
+                console.error('Error loading ticket:', error);
+                alert('Error loading ticket');
+                window.location.href = '/bookings';
+            }
+        }
+
+        function displayTicket(ticket) {
+            // Header
+            document.getElementById('ticketNumber').textContent = `Ticket #${ticket.ticketNumber}`;
+            
+            // Route
+            document.getElementById('sourceCity').textContent = ticket.source;
+            document.getElementById('destinationCity').textContent = ticket.destination;
+
+            // Passenger & Bus Details
+            document.getElementById('passengerName').textContent = ticket.passengerName;
+            document.getElementById('busNumber').textContent = ticket.busNumber;
+            document.getElementById('seatNumber').textContent = ticket.seatNumber || 'N/A';
+            document.getElementById('travelDate').textContent = new Date(ticket.travelDate).toLocaleDateString('en-IN', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('departureTime').textContent = ticket.departureTime;
+            document.getElementById('fare').textContent = `₹${ticket.fare}`;
+
+            // Booking Details
+            document.getElementById('bookingId').textContent = new URLSearchParams(window.location.search).get('bookingId');
+            
+            // QR Code
+            const qrContainer = document.getElementById('qrCodeContainer');
+            if (ticket.qrCode) {
+                qrContainer.innerHTML = `<img src="data:image/png;base64,${ticket.qrCode}" alt="QR Code" class="qr-code-image">`;
+            } else {
+                qrContainer.innerHTML = '<p style="color: #666;">QR Code not available</p>';
+            }
+        }
+
+        function printTicket() {
+            window.print();
+        }
+
+        function downloadTicket() {
+            // Create a simple text version for download
+            const ticketText = `
+BUS TICKET - ${ticketData.ticketNumber}
+================================
+
+Journey: ${ticketData.source} → ${ticketData.destination}
+Bus: ${ticketData.busNumber}
+Seat: ${ticketData.seatNumber}
+Date: ${new Date(ticketData.travelDate).toLocaleDateString()}
+Time: ${ticketData.departureTime}
+Passenger: ${ticketData.passengerName}
+Fare: ₹${ticketData.fare}
+
+Please carry this ticket while boarding.
+            `;
+
+            const blob = new Blob([ticketText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ticket-${ticketData.ticketNumber}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function goBack() {
+            window.location.href = '/bookings';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+    </script>
+</body>
+</html>
